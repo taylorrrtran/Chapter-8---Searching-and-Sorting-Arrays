@@ -1,10 +1,17 @@
 #include <iostream>
 #include "Chapter8Problems.h"
 #include <vector>
+#include <string>
 
 int main() {
+
+	/* The functions below are personal coding solutions to the programming exercises in Chapter 8 - Searching and Sorting Arrays from the textbook
+	"Starting out with C++: From Control Structurs through Objects (8th Edition)" - By Tony Gaddis. 
+
+	To test a different function, simply replace the function name on line 14 to whichever one you desire */
+
 	chapter8Problems *p1 = new chapter8Problems();
-	p1->rainfallMod();
+	p1->searchBenchmarks();
 	system("pause");
 	return 0;
 }
@@ -202,7 +209,7 @@ void chapter8Problems::rainfallMod() {
 
 	//Use bubble sort to sort rainfall array in descending order
 	bool swap;
-	int temp;
+	double temp;
 	int size = 12;
 
 	do {
@@ -226,6 +233,162 @@ void chapter8Problems::rainfallMod() {
 			}
 		}
 	}
+}
+
+void chapter8Problems::stringSelectionSort() {
+	
+	//This program will use selection sort to sort an array of strings
+
+	const int NUM_NAMES = 20;
+	int startScan, minIndex, size = 20;
+	std::string minValue;
+	std::string names[20] = { "Collins, Bill", "Smith, Bart", "Allen, Jim", "Griffin, Jim", "Stamey, Marty", "Rose, Geri",
+							   "Taylor, Terri", "Johnson, Jill", "Allison, Jeff", "Looney, Joe", "Wolfe, Bill", "James, Jean",
+							   "Weaver, Jim", "Pore, Bob", "Rutherford, Greg", "Javens, Renee", "Harrison, Rose", "Setzer, Cathy", "Pike, Gordon",
+							   "Holland, Beth" };
+
+	//Selection sort to sort array elements in order
+	for (startScan = 0; startScan < (size - 1); startScan++) {
+		minIndex = startScan;
+		minValue = names[startScan];
+		for (int index = startScan + 1; index < size; index++) {
+			if (names[index] < minValue) {
+				minValue = names[index];
+				minIndex = index;
+			}
+		}
+		names[minIndex] = names[startScan];
+		names[startScan] = minValue;
+	}
+
+	//Display the sorted array
+	for (int i = 0; i < size; i++)
+		std::cout << names[i] << std::endl;
+}
+
+void chapter8Problems::binaryStringSearch() {
+
+	//This program will use binary search in an array of strings
+
+	const int NUM_NAMES = 20;
+	int startScan, minIndex, size = 20;
+	int first = 0, last = size - 1, middle, position = -1;
+	bool found = false;
+	
+	std::string minValue, userInput;
+	std::string names[20] = { "Collins, Bill", "Smith, Bart", "Allen, Jim", "Griffin, Jim", "Stamey, Marty", "Rose, Geri",
+		"Taylor, Terri", "Johnson, Jill", "Allison, Jeff", "Looney, Joe", "Wolfe, Bill", "James, Jean",
+		"Weaver, Jim", "Pore, Bob", "Rutherford, Greg", "Javens, Renee", "Harrison, Rose", "Setzer, Cathy", "Pike, Gordon",
+		"Holland, Beth" };
+
+	//Ask user for name input
+	std::cout << "Please enter a name to find in the form of: last name, first name" << std::endl;
+	getline(std::cin, userInput);
+
+	//Selection sort to sort array elements in order
+	for (startScan = 0; startScan < (size - 1); startScan++) {
+		minIndex = startScan;
+		minValue = names[startScan];
+		for (int index = startScan + 1; index < size; index++) {
+			if (names[index] < minValue) {
+				minValue = names[index];
+				minIndex = index;
+			}
+		}
+		names[minIndex] = names[startScan];
+		names[startScan] = minValue;
+	}
+
+	//Use binary search to validate the user's input
+	while (!found && first <= last) {
+		middle = (first + last) / 2;
+		if (names[middle] == userInput) {
+			found = true;
+			position = middle;
+		}
+		else if (names[middle] > userInput)
+			last = middle - 1;
+		else
+			first = middle + 1;
+	}
+
+	//Confirm whether or not the name entered was found in the array
+	if (position == -1)
+		std::cout << "The name you have entered was not found." << std::endl;
+	else
+		std::cout << "The name you have entered is valid!" << std::endl;
+}
+
+void chapter8Problems::searchBenchmarks() {
+
+	//This program will keep a count of the number of comparisons that both linear search and binary search make in an array of 20 integers
+
+	const int size = 20;
+	int numbers[size] = { 2,9,1,3,0,8,7,11,6,5,39,29,27,40,58,31,39,20,25,10 };
+	int index = 0, userInput, position = -1;
+	int linearComparison = 0;
+	bool found = false;
+
+	//Ask user for input
+	std::cout << "Please enter an integer to find: ";
+	std::cin >> userInput;
+
+	//Linear Search Algorithm
+	while (index < size && !found) {
+		if (numbers[index] == userInput) {
+			found = true;
+			position = index;
+			linearComparison++;
+		}
+		else
+			linearComparison++;
+		index++;
+	}
+
+	//Selection Sort to organize the array in order before beginning the Binary Search
+	int startScan, minIndex, minValue;
+	for (startScan = 0; startScan < (size - 1); startScan++) {
+		minIndex = startScan;
+		minValue = numbers[startScan];
+		for (int index = startScan + 1; index < size; index++) {
+			if (numbers[index] < minValue) {
+				minValue = numbers[index];
+				minIndex = index;
+			}
+		}
+		numbers[minIndex] = numbers[startScan];
+		numbers[startScan] = minValue;
+	}
+
+	//Binary Search Algorithm
+	int first = 0, last = size - 1, middle, position2 = -1, binaryComparison = 0;
+	bool found2 = false;
+	while (!found2 && first <= last) {
+		middle = (first + last) / 2;
+		if (numbers[middle] == userInput) {
+			found2 = true;
+			position2 = middle;
+			binaryComparison++;
+		}
+		else if (numbers[middle] > userInput) {
+			last = middle - 1;
+			binaryComparison++;
+		}
+		else {
+			first = middle + 1;
+			binaryComparison++;
+		}
+	}
+
+	//Return number of comparisons for each search algorithm
+	std::cout << "Amount of comparisons using linear search: " << linearComparison << std::endl;
+	std::cout << "Amount of comparisons using binary search: " << binaryComparison << std::endl;
+
+	//Confirm whether or not the user's input was found
+	if (position == -1)
+		std::cout << "The value you have inputted was not found: " << userInput << std::endl;
+	else
+		std::cout << "The value you have inputted was found: " << userInput << std::endl;
 }
 
 chapter8Problems::chapter8Problems() {
